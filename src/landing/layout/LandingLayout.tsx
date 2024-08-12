@@ -1,34 +1,35 @@
 import React from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import { Header } from '../components/Header';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
+import { landinStyles } from '../../theme/landingTheme';
+import { CustomButton } from '../../components';
 
 interface Props {
     children: any;
+    navigation1: string;
+    navigation2: string;
 }
 
-export const LandingLayout = ({ children }: Props) => {
+export const LandingLayout = ({ children, navigation1, navigation2 }: Props) => {
+    const navigation: NavigationProp<ParamListBase> = useNavigation();
+
     return (
         <>
-            <KeyboardAvoidingView
-                style={{ flex: 1 }}
-                behavior={(Platform.OS === 'ios') ? 'padding' : 'height'} // Para que mi teclado no tape la info que está en pantalla
-            >
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    <View style={styles.formContainer}>
-                        <Header />
+            <ScrollView showsVerticalScrollIndicator={true} style={landinStyles.mainContainer}>
+                {/* Children */}
+                {children}
 
-                        <View style={{ marginTop: 20, flex: 1 }}>
-                            {children}
-                        </View>
-                    </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
+                {/* Botones */}
+                <View style={landinStyles.buttonContainer}>
+                    <CustomButton label="Confirmar" style={landinStyles.button} onEvent={() => navigation.navigate(navigation1)} />
+
+                    <TouchableOpacity onPress={() => navigation.navigate(navigation2)}>
+                        <Text style={[landinStyles.cancelText, landinStyles.linkText]}>
+                            Cancelar
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
         </>
     );
 };
-
-const styles = StyleSheet.create({
-    formContainer: {
-        flex: 1,
-    },
-});

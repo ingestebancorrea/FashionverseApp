@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AuthContext } from '../context/auth/AuthContext';
 import { LoginScreen, SignUpScreen, RolesScreen, PreferencesScreen, ClientConfirmAccountDataScreen, StoreConfirmAccountDataScreen } from '../auth/screens';
-import { PostsScreen } from '../landing/client/screens/PostsScreen';
+import { ClientPostsScreen } from '../landing/client/screens/ClientPostsScreen';
 import { DrawerNavigator } from './Drawer';
 
 const Stack = createStackNavigator();
@@ -28,10 +28,15 @@ export const Navigator = () => {
           <Stack.Screen name="ClientConfirmAccountDataScreen" component={ClientConfirmAccountDataScreen} />
           <Stack.Screen name="StoreConfirmAccountDataScreen" component={StoreConfirmAccountDataScreen} />
         </>
-      ) : (user && user.role.alias === 'STORE') ? (
-        <Stack.Screen name="StoreScreens" component={DrawerNavigator} />
       ) : (
-        <Stack.Screen name="PostsScreen" component={PostsScreen} />
+        <>
+          {user && user.role.alias === 'STORE' && (
+            <Stack.Screen name="StoreScreens" component={DrawerNavigator} />
+          )}
+          {user && user.role.alias === 'CLIENT' && (
+            <Stack.Screen name="ClientPostsScreen" component={ClientPostsScreen} />
+          )}
+        </>
       )}
     </Stack.Navigator>
   );

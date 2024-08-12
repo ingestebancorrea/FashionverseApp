@@ -2,10 +2,10 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
-export const ProductsScreen = () => {
+export const ClientPostsScreen = () => {
   return (
     <View>
-      <Text>ProductsScreen</Text>
+      <Text>ClientPostsScreen</Text>
     </View>
   );
 };

@@ -12,7 +12,7 @@ import { loginStyles } from '../../theme/loginTheme';
 import { AuthContext } from '../../context/auth/AuthContext';
 import { LoginProvider, Roles } from '../enums/auth.enums';
 import { CustomPassword } from '../components/CustomPassword';
-import { RegisterData } from '../interfaces/authInterfaces';
+import { RegisterData } from '../interfaces/auth.interfaces';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { signUpSchema, signUpSchemaWithOutName } from '../schemas/auth.schemas';
 
@@ -214,7 +214,7 @@ export const SignUpScreen = ({ navigation }: Props) => {
         {errors.confirmPassword && <Text style={{ color: 'red' }}>{errors.confirmPassword.message}</Text>}
 
         {/* Boton Crear Cuenta */}
-        <CustomButton label="CREAR CUENTA" onEvent={handleSubmit(onSubmit)} />
+        <CustomButton label="CREAR CUENTA" onEvent={handleSubmit(onSubmit)} style={{ paddingTop: 15 }} />
 
         {/* Login */}
         <View style={loginStyles.newUserContainer}>

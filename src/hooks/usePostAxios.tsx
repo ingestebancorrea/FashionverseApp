@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import { AxiosError } from 'axios';
-import authApi from '../api/authApi';
+import createApiInstance from '../api/apiInstance';
 
 export const useAxiosPost = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [data, setData] = useState(null);
 
-    const postData = async (url: string, body: object) => {
+    const postData = async (baseUrl: string, complement: string, body: object) => {
         setIsLoading(true);
         try {
-            const response = await authApi.post(url, body);
+            const api = createApiInstance(baseUrl);
+            const response = await api.post(complement, body);
             setData(response.data);
         } catch (error) {
             console.log(error);

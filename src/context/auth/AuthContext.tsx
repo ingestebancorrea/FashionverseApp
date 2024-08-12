@@ -1,25 +1,14 @@
 import React, { createContext, useEffect, useReducer, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LoginData, LoginWithProvider, RegisterData, RegisterWithProvider, SaveRole, Usuario } from '../../auth/interfaces/authInterfaces';
-import { AuthState, authReducer } from './AuthReducer';
-import authApi from '../../api/authApi';
 import { AxiosError } from 'axios';
+import { REACT_APP_AUTH_SERVICE } from '@env';
+import { LoginData, LoginWithProvider, RegisterData, RegisterWithProvider, SaveRole, Usuario } from '../../auth/interfaces/auth.interfaces';
+import { AuthState, authReducer } from './AuthReducer';
+import createApiInstance from '../../api/apiInstance';
+import { AuthContextProps } from '../types/auth/autcontext.type';
 
-type AuthContextProps = {
-    role?: string;
-    errorMessage: string;
-    user: Usuario | null;
-    status: 'checking' | 'authenticating' | 'authenticated' | 'not-authenticated';
-    isLoading: boolean;
-    signUpWithProvider: (registerWithProvider: RegisterWithProvider) => void;
-    signUp: (registerData: RegisterData) => void;
-    signInWithProvider: (loginWithProvider: LoginWithProvider) => void;
-    signIn: (loginData: LoginData) => void;
-    logOut: () => void;
-    removeError: () => void;
-    saveRole: (alias: SaveRole) => void;
-    finishRegister: () => void;
-}
+export const baseURL = REACT_APP_AUTH_SERVICE;
+const api = createApiInstance(baseURL);
 
 const authInitialState: AuthState = {
     status: 'checking',
@@ -45,7 +34,7 @@ export const AuthProvider = ({ children }: any) => {
             return dispatch({ type: 'notAuthenticated' });
         }
 
-        const resp = await authApi.get('/auth');// Validar o renovar token
+        const resp = await api.get('/auth');// Validar o renovar token
 
         if ( resp.status !== 200 ) {
             return dispatch({ type: 'notAuthenticated' });
@@ -55,7 +44,7 @@ export const AuthProvider = ({ children }: any) => {
         dispatch({
             type: 'signIn',
             payload: {
-                user: resp.data.usuario,
+                user: resp.data,
             },
         });
     };
@@ -63,7 +52,7 @@ export const AuthProvider = ({ children }: any) => {
     const signUpWithProvider = async ({ token, loginprovider, alias_role }: RegisterWithProvider) => {
         setIsLoading(true); // Indicar que se está cargando
         try {
-            const { data } = await authApi.post<Usuario>('/auth/services/register', {token, loginprovider, alias_role});
+            const { data } = await api.post<Usuario>('/auth/services/register', {token, loginprovider, alias_role});
             console.log(data);
             dispatch({
                 type: 'startSignUp',
@@ -83,7 +72,7 @@ export const AuthProvider = ({ children }: any) => {
     const signUp = async ({ alias_role, name, lastname, username, password }: RegisterData) => {
         setIsLoading(true);
         try {
-            const { data } = await authApi.post<Usuario>('/auth/credentials/register', {alias_role, name, lastname, username, password});
+            const { data } = await api.post<Usuario>('/auth/credentials/register', {alias_role, name, lastname, username, password});
             console.log('data',data);
             dispatch({
                 type: 'startSignUp',
@@ -103,7 +92,7 @@ export const AuthProvider = ({ children }: any) => {
     const signInWithProvider = async ({ token, loginprovider }: LoginWithProvider) => {
         setIsLoading(true);
         try {
-            const { data } = await authApi.post<Usuario>('/auth/services/login',{token, loginprovider});
+            const { data } = await api.post<Usuario>('/auth/services/login',{token, loginprovider});
             console.log('data:',data);
             dispatch({
                 type: 'signIn',
@@ -123,7 +112,7 @@ export const AuthProvider = ({ children }: any) => {
     const signIn = async ({ username, password }: LoginData) => {
         setIsLoading(true);
         try {
-            const { data } = await authApi.post<Usuario>('/auth/credentials/login', { username, password });
+            const { data } = await api.post<Usuario>('/auth/credentials/login', { username, password });
 
             dispatch({
                 type: 'signIn',
@@ -143,6 +132,10 @@ export const AuthProvider = ({ children }: any) => {
     const logOut = async () => {
         await AsyncStorage.removeItem('token');
         dispatch({ type: 'logout' });
+    };
+
+    const addError = (error: string) => {
+        dispatch({ type: 'addError', payload: error });
     };
 
     const removeError = () => {
@@ -177,6 +170,7 @@ export const AuthProvider = ({ children }: any) => {
             signInWithProvider,
             signIn,
             logOut,
+            addError,
             removeError,
             saveRole,
             finishRegister,

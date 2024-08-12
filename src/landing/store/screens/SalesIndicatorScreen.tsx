@@ -1,13 +1,11 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { LandingLayout } from '../../layout/LandingLayout';
+import { landingStyles } from '../../../theme/landingTheme';
 
 export const SalesIndicatorScreen = () => {
   return (
-    <LandingLayout>
-      <View>
-        <Text>SalesIndicatorScreen</Text>
-      </View>
-    </LandingLayout>
+    <View style={landingStyles.mainContainer}>
+      <Text>SalesIndicatorScreen</Text>
+    </View>
   );
 };

@@ -125,7 +125,7 @@ export const LoginScreen = ({ navigation }: Props) => {
           {errors.password && <Text style={{ color: 'red' }}>{errors.password.message}</Text>}
 
           {/* Boton Login */}
-          <CustomButton label="INICIAR SESIÓN" onEvent={handleSubmit(onSubmit)} />
+          <CustomButton label="INICIAR SESIÓN" onEvent={handleSubmit(onSubmit)} style={{ paddingTop: 15 }} />
 
           {/* Crear una nueva cuenta */}
           <View style={loginStyles.newUserContainer}>

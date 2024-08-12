@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { REACT_APP_AUTH_SERVICE } from '@env';
 import { AuthLayout } from '../layout/AuthLayout';
 import { CustomButton } from '../../components/CustomButton';
 import { preferences } from '../data/auth.data';
@@ -31,7 +32,7 @@ export const PreferencesScreen = ({ navigation }: Props) => {
     if (selectedPreferences.length > 0) {
       const requestData = selectedPreferences.map(id => ({ id_preference: id }));
 
-      await postData('/clientpreferences', requestData);
+      await postData(REACT_APP_AUTH_SERVICE,'/clientpreferences', requestData);
       data && finishRegister();
     } else {
       showToast('error', 'Error', 'Debes seleccionar al menos una preferencia!');
@@ -76,7 +77,7 @@ export const PreferencesScreen = ({ navigation }: Props) => {
         </View>
 
         <View style={{ marginBottom: 95 }}>
-          <CustomButton label="Continuar" onEvent={handleContinue} />
+          <CustomButton label="Continuar" onEvent={handleContinue} style={{ paddingTop: 15 }} />
 
           <TouchableOpacity style={styles.textContainer} onPress={handleSkip}>
             <Text style={styles.text}>Saltar</Text>

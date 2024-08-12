@@ -9,6 +9,7 @@ import { useAxiosPost } from '../../hooks/usePostAxios';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { clientConfirmData } from '../schemas/auth.schemas';
+import { REACT_APP_AUTH_SERVICE } from '@env';
 
 interface Props extends StackScreenProps<any, any> { }
 
@@ -43,12 +44,12 @@ export const ClientConfirmAccountDataScreen = ({ navigation, route }: Props) => 
             birth_date: data.dateBirth,
         };
 
-        await postData('/clients', body);
+        await postData(REACT_APP_AUTH_SERVICE,'/clients', body);
         data && navigation.replace('PreferencesScreen');
     };
 
     useEffect(() => {
-        if (!error) return;
+        if (!error) {return;}
 
         Alert.alert('Error en la inserción.', error, [{
             text: 'Ok',
@@ -107,7 +108,7 @@ export const ClientConfirmAccountDataScreen = ({ navigation, route }: Props) => 
                     <MultiSelect
                         defaultValue={inputValue}
                         defaultButtonText="Tipo documento de identidad"
-                        onFocus={async () => await fetchData('/documenttypes')}
+                        onFocus={async () => await fetchData(REACT_APP_AUTH_SERVICE,'/documenttypes')}
                         data={response}
                         onSelect={(selectedItem) => {
                             if (selectedItem !== undefined) {
@@ -179,7 +180,7 @@ export const ClientConfirmAccountDataScreen = ({ navigation, route }: Props) => 
             </View>
 
             {/* Boton Finalizar Registro */}
-            <CustomButton label="FINALIZAR REGISTRO" onEvent={handleSubmit(onSubmit)} />
+            <CustomButton label="FINALIZAR REGISTRO" onEvent={handleSubmit(onSubmit)} style={{ paddingTop: 15 }} />
         </AuthLayout>
     );
 };

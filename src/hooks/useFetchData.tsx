@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import authApi from '../api/authApi';
+import createApiInstance from '../api/apiInstance';
 
 export const useFetchData = () => {
   const [data, setData] = useState<any[]>([]);
 
-  const fetchData = async (urlComplement: string) => {
+  const fetchData = async (baseUrl: string, urlComplement: string) => {
     try {
-      const response = await authApi.get(urlComplement);
+      const api = createApiInstance(baseUrl);
+      const response = await api.get(urlComplement);
 
       const formattedData = response.data.map((item: any) => ({
         id: item.id,
@@ -23,6 +24,6 @@ export const useFetchData = () => {
 
   return {
     fetchData,
-    data
+    data,
   };
 };

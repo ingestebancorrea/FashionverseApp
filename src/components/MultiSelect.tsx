@@ -23,9 +23,9 @@ export const MultiSelect = ({ data, defaultButtonText, onFocus, ...props }: Sele
                     // Devuelve la propiedad 'label' del objeto item
                     return item.name;
                 }}
-                buttonStyle={styles.dropdownButton}
+                buttonStyle={[styles.dropdownButton,props.disabled && styles.disabled]}
                 dropdownStyle={styles.dropdown}
-                buttonTextStyle={styles.buttonText}
+                buttonTextStyle={[styles.buttonText,props.disabled && styles.dissabledText]}
                 {...props}
             />
         </View>
@@ -48,5 +48,12 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         textAlign: 'left',
+    },
+    disabled: {
+        backgroundColor: '#dadada',
+        borderColor: '#dadada',
+    },
+    dissabledText: {
+        color: 'gray',
     },
 });

@@ -10,6 +10,7 @@ import { useFetchData } from '../../hooks/useFetchData';
 import { AuthContext } from '../../context/auth/AuthContext';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { storeConfirmData } from '../schemas/auth.schemas';
+import { REACT_APP_AUTH_SERVICE } from '@env';
 
 interface Props extends StackScreenProps<any, any> { }
 
@@ -50,12 +51,12 @@ export const StoreConfirmAccountDataScreen = ({ navigation }: Props) => {
       other_references: data.otherReferences || null,
     };
 
-    await postData('/stores', body);
+    await postData(REACT_APP_AUTH_SERVICE,'/stores', body);
     response && finishRegister();
   };
 
   useEffect(() => {
-    if (!error) return;
+    if (!error) {return;}
 
     Alert.alert('Error en la inserción.', error, [{
       text: 'Ok',
@@ -121,7 +122,7 @@ export const StoreConfirmAccountDataScreen = ({ navigation }: Props) => {
               defaultValue={inputValue}
               defaultButtonText="Tipo de tienda"
               data={response}
-              onFocus={async () => await fetchData('/storestype')}
+              onFocus={async () => await fetchData(REACT_APP_AUTH_SERVICE,'/storestype')}
               onSelect={(selectedItem) => {
                 if (selectedItem !== undefined) {
                   onChange(selectedItem.id, 'storeType');
@@ -153,7 +154,7 @@ export const StoreConfirmAccountDataScreen = ({ navigation }: Props) => {
               defaultValue={inputValue}
               defaultButtonText="Departamento"
               data={response}
-              onFocus={async () => await fetchData('/departments')}
+              onFocus={async () => await fetchData(REACT_APP_AUTH_SERVICE,'/departments')}
               onSelect={(selectedItem) => {
                 if (selectedItem !== undefined) {
                   onChange(selectedItem.id, 'department');
@@ -173,7 +174,7 @@ export const StoreConfirmAccountDataScreen = ({ navigation }: Props) => {
               defaultValue={inputValue}
               defaultButtonText="Ciudad"
               data={response}
-              onFocus={async () => await fetchData(`/cities/department/${department}`)}
+              onFocus={async () => await fetchData(REACT_APP_AUTH_SERVICE,`/cities/department/${department}`)}
               onSelect={(selectedItem) => {
                 if (selectedItem !== undefined) {
                   onChange(selectedItem.id, 'city');
@@ -282,7 +283,7 @@ export const StoreConfirmAccountDataScreen = ({ navigation }: Props) => {
 
         {/* Boton Finalizar Registro */}
         <View style={{ marginBottom: 20 }}>
-          <CustomButton label="FINALIZAR REGISTRO" onEvent={handleSubmit(onSumbit)} />
+          <CustomButton label="FINALIZAR REGISTRO" onEvent={handleSubmit(onSumbit)} style={{ paddingTop: 15 }} />
         </View>
 
       </View>
