@@ -79,7 +79,7 @@ export const LoginScreen = ({ navigation }: Props) => {
       text: 'Ok',
       onPress: removeError,// Limpiar el error
     }]);
-  }, [errorMessage]);
+  }, [errorMessage, removeError]);
 
   if (isLoading) { return (<Loading />); }
 
