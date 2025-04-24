@@ -17,30 +17,29 @@ export const CustomPassword = ({ placeholder, value, onChange }: Props) => {
   };
 
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <View style={loginStyles.inputContainer}>
+      <Ionicons name="lock-closed" size={20} color="#D7D3E3" style={loginStyles.icon} />
       <TextInput
         placeholder={placeholder}
-        placeholderTextColor="black"
+        placeholderTextColor="#BEBFC9"
+        underlineColorAndroid="transparent"
         secureTextEntry={!isPasswordVisible}
         value={value}
         onChangeText={onChange}
-        style={[{ flex: 4, width: '100%', color: 'black',
-        fontSize: 20 }, (Platform.OS === 'ios') && loginStyles.inputFieldIOS,]}
+        style={[styles.textInput, (Platform.OS === 'ios') && loginStyles.inputFieldIOS,]}
       />
       <TouchableOpacity onPress={togglePasswordVisibility} style={{ flex: 1 }}>
-        <Ionicons name={isPasswordVisible ? 'eye-off' : 'eye'} size={24} color="black" style={{ marginLeft: 30 }} />
+        <Ionicons name={isPasswordVisible ? 'eye-off' : 'eye'} size={20} color="white" style={{ marginLeft: 30 }} />
       </TouchableOpacity>
-      <View style={styles.line} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  line: {
-    borderBottomWidth: 1,
-    borderBottomColor: 'black',
-    width: '100%', // Ancho igual al TextInput
-    position: 'absolute',
-    bottom: 0,
+  textInput: {
+    flex: 4,
+    width: '100%',
+    color: 'white',
+    fontSize: 16,
   },
 });

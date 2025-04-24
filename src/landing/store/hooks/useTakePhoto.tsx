@@ -34,6 +34,7 @@ export const useTakePhoto = () => {
 
     return {
         tempUri,
+        setTempUri,
         file,
         takePhotoFromGallery,
         takePhotoFromCamera,

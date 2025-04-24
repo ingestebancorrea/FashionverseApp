@@ -3,7 +3,7 @@ import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentScroll
 import { Image, View, TouchableOpacity, Text, useWindowDimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { landingStyles } from '../theme/landingTheme';
-import { StoreProductScreen, StoreProductsScreen, SalesIndicatorScreen, SellConditionsScreen, StorePostsScreen, PostDescriptionScreen, PostTypesScreen } from '../landing/store/screens';
+import { StoreProductScreen, StoreProductsScreen, SalesIndicatorScreen, SellConditionsScreen, StorePostsScreen, PostDescriptionScreen, PostTypesScreen, StoreProfileConfigurationScreen, StoreBasicDataScreen, StoreProfileSettingsScreen } from '../landing/store/screens';
 import { Header } from '../landing/components/Header';
 
 const Drawer = createDrawerNavigator();
@@ -35,6 +35,9 @@ export const DrawerNavigator = () => {
             <Drawer.Screen name="StorePostsScreen" component={StorePostsScreen} options={{unmountOnBlur: true}} />
             <Drawer.Screen name="PostDescriptionScreen" component={PostDescriptionScreen} options={{unmountOnBlur: true}} />
             <Drawer.Screen name="PostTypesScreen" component={PostTypesScreen} options={{unmountOnBlur: true}} />
+            <Drawer.Screen name="StoreBasicDataScreen" component={StoreBasicDataScreen} options={{unmountOnBlur: true}} />
+            <Drawer.Screen name="StoreProfileSettingsScreen" component={StoreProfileSettingsScreen} options={{unmountOnBlur: true}} />
+            <Drawer.Screen name="StoreProfileConfigurationScreen" component={StoreProfileConfigurationScreen} options={{unmountOnBlur: true}} />
         </Drawer.Navigator>
     );
 };
@@ -85,6 +88,17 @@ const MenuInterno = ({ navigation }: DrawerContentComponentProps) => {
                 >
                     <Icon name="image-outline" size={23} color="black" />
                     <Text style={landingStyles.menuText}>Publicaciones</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={{
+                        ...landingStyles.menuButton,
+                        flexDirection: 'row',
+                    }}
+                    onPress={() => navigation.navigate('StoreProfileConfigurationScreen')}
+                >
+                    <Icon name="person-outline" size={23} color="black" />
+                    <Text style={landingStyles.menuText}>Perfil</Text>
                 </TouchableOpacity>
             </View>
         </DrawerContentScrollView>

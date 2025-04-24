@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { Alert, Keyboard, Text, TouchableOpacity, View } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
@@ -8,11 +9,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { CustomInput, CustomButton, Loading } from '../../components';
 import { loginStyles } from '../../theme/loginTheme';
 import { AuthLayout } from '../layout/AuthLayout';
-import { FacebookButton, GoogleButton } from '../components';
+import { FacebookButton, GoogleButton, HorizontalLine } from '../components';
 import { LoginProvider } from '../enums/auth.enums';
 import { AuthContext } from '../../context/auth/AuthContext';
 import { CustomPassword } from '../components/CustomPassword';
-import { Controller, useForm } from 'react-hook-form';
 import { loginSchema } from '../schemas/auth.schemas';
 
 interface Props extends StackScreenProps<any, any> { }
@@ -24,7 +24,7 @@ GoogleSignin.configure({
 
 export const LoginScreen = ({ navigation }: Props) => {
   const { signInWithProvider, signIn, errorMessage, removeError, isLoading } = useContext(AuthContext);
-  const { handleSubmit, control, formState: { errors }  } = useForm({
+  const { handleSubmit, control, formState: { errors } } = useForm({
     defaultValues: {
       email: '',
       password: '',
@@ -74,7 +74,7 @@ export const LoginScreen = ({ navigation }: Props) => {
   };
 
   useEffect(() => {
-    if (!errorMessage) return;
+    if (!errorMessage) { return; }
     Alert.alert('Login incorrecto', errorMessage, [{
       text: 'Ok',
       onPress: removeError,// Limpiar el error
@@ -86,13 +86,11 @@ export const LoginScreen = ({ navigation }: Props) => {
   return (
     <>
       <AuthLayout>
-        <FacebookButton label="INICIA SESIÓN CON FACEBOOK" onEvent={loginWithFacebook} />
+        <FacebookButton label="INICIAR SESIÓN CON FACEBOOK" onEvent={loginWithFacebook} />
 
-        <GoogleButton label="INICIA SESIÓN CON GOOGLE" onEvent={loginWithGoogle} />
+        <GoogleButton label="INICIAR SESIÓN CON GOOGLE" onEvent={loginWithGoogle} />
 
-        <View style={{ alignItems: 'center', marginVertical: 15 }}>
-          <Text style={{ fontSize: 20, color: 'black' }}>or</Text>
-        </View>
+        <HorizontalLine />
 
         <View>
           <Controller
@@ -104,7 +102,8 @@ export const LoginScreen = ({ navigation }: Props) => {
                 placeholder="Correo electrónico *"
                 keyboardType="email-address"
                 value={inputValue}
-                onChange={(value) => onChange(value, 'email')}
+                onChangeText={(value) => onChange(value, 'email')}
+                icon="mail"
               />
             )}
           />
@@ -125,7 +124,7 @@ export const LoginScreen = ({ navigation }: Props) => {
           {errors.password && <Text style={{ color: 'red' }}>{errors.password.message}</Text>}
 
           {/* Boton Login */}
-          <CustomButton label="INICIAR SESIÓN" onEvent={handleSubmit(onSubmit)} style={{ paddingTop: 15 }} />
+          <CustomButton label="INICIAR SESIÓN" onEvent={handleSubmit(onSubmit)} style={{ paddingTop: 30 }} />
 
           {/* Crear una nueva cuenta */}
           <View style={loginStyles.newUserContainer}>
@@ -133,7 +132,10 @@ export const LoginScreen = ({ navigation }: Props) => {
               activeOpacity={0.8}
               onPress={() => navigation.replace('RolesScreen')} // Destruye la pantalla anterior
             >
-              <Text style={loginStyles.buttonText}>¿No tienes cuenta? Registrate</Text>
+              <Text style={loginStyles.buttonText}>
+                ¿No tienes cuenta?{' '}
+                <Text style={loginStyles.registerText}>Regístrate</Text>
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

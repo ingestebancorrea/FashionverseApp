@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { landingStyles } from '../../../theme/landingTheme';
 import { Searchbar } from 'react-native-paper';
 import { AddButton } from '../../components/AddButton';
 import { StackScreenProps } from '@react-navigation/stack';
-import { posts } from '../data/posts';
 import { PostCard } from '../components/PostCard';
 import Pagination from '@cherry-soft/react-native-basic-pagination';
 import { useDataFilter } from '../hooks/useDataFilter';
+import { PostsContext } from '../../../context/landing/store/PostsContext';
+import { Loading } from '../../../components';
 
 interface Props extends StackScreenProps<any, any> { }
 
 export const StorePostsScreen = ({ navigation, route }: Props) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const { loadPosts, posts, loading } = useContext(PostsContext);
   const { paginatedData, page, setPage } = useDataFilter({ data: posts });
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
@@ -24,6 +26,14 @@ export const StorePostsScreen = ({ navigation, route }: Props) => {
         : [...prevIds, id]
     );
   };
+
+  useEffect(() => {
+    loadPosts({ description: searchQuery });
+  }, [loadPosts, searchQuery]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <View style={landingStyles.mainContainer}>
@@ -48,7 +58,7 @@ export const StorePostsScreen = ({ navigation, route }: Props) => {
       {
         posts.length > 0 ? (
           <>
-            {/* Productos */}
+            {/* Publicaciones */}
             <View style={styles.containerParentProducts}>
               <FlatList
                 data={paginatedData}
@@ -73,6 +83,7 @@ export const StorePostsScreen = ({ navigation, route }: Props) => {
               onPageChange={setPage}
               containerStyle={styles.paginationContainer}
               btnStyle={styles.paginationButton}
+              showLastPagesButtons
             />
           </>
         )

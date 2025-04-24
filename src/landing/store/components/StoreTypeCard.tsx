@@ -15,6 +15,7 @@ interface Props {
 }
 
 export const StoreTypeCard = ({ storeType, isSelected = false, onPress }: Props) => {
+  console.log('isSelected',isSelected);
   return (
     <TouchableOpacity
       style={[styles.cardContainer, isSelected && styles.selectedCard]}

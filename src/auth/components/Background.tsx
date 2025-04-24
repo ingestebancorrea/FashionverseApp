@@ -1,19 +1,17 @@
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 export const Background = () => {
   return (
-    <View
-        style={{
-            position: 'absolute',
-            backgroundColor: '#F2EDE0',
-            top: -330,
-            width: 1000,
-            height: 1200,
-            transform: [
-              { rotate: '-70deg' },
-            ], // Girar div
-        }}
-    />
+    <View style={styles.backgroundContainer}/>
   );
 };
+
+const styles = StyleSheet.create({
+    backgroundContainer: {
+      position: 'absolute',
+      backgroundColor: '#150F2B',
+      width: 1000,
+      height: 1200,
+    },
+});

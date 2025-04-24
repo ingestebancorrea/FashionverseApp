@@ -16,6 +16,7 @@ export const useFetchData = () => {
 
       // Almacena los datos formateados en el estado
       setData(formattedData);
+      return formattedData;
     } catch (error) {
       console.error('Error fetching data:', error);
       // Handle error if needed

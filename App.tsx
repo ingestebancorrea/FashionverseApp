@@ -3,12 +3,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Navigator } from './src/navigator/Navigator';
 import { AuthProvider } from './src/context/auth/AuthContext';
 import { ProductsProvider } from './src/context/landing/store/ProductsContextx';
+import { PostsProvider } from './src/context/landing/store/PostsContext';
 
 const AppState = ({ children }: any) => {
   return (
     <AuthProvider>
       <ProductsProvider>
-        {children}
+        <PostsProvider>
+          {children}
+        </PostsProvider>
       </ProductsProvider>
     </AuthProvider>
   );

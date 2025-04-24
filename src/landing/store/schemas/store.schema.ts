@@ -1,6 +1,9 @@
 import * as yup from 'yup';
 
 export const productSchema = yup.object().shape({
+  id: yup
+    .string()
+    .optional(),
   name: yup
     .string()
     .required('Este campo es requerido')
@@ -31,4 +34,25 @@ export const productPriceSchema = yup.object().shape({
       const numberValue = parseFloat(value);
       return numberValue <= 500000;
     }),
+});
+
+export const postSchema = yup.object().shape({
+  description: yup
+    .string()
+    .required('Este campo es requerido')
+    .min(8)
+    .max(100),
+});
+
+export const postTypeSchema = yup.object().shape({
+  posttype: yup
+    .string()
+    .required('Este campo es requerido'),
+});
+
+export const postDetailsSchema = yup.object().shape({
+  products: yup
+    .array()
+    .required('Selecciona un producto')
+    .min(1, 'Selecciona al menos un producto'),
 });

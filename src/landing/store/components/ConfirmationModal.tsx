@@ -1,21 +1,15 @@
 import React from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
 import { landingStyles } from '../../../theme/landingTheme';
 import { CustomButton } from '../../../components';
 
 interface Props {
     isVisible: boolean;
     onClose: () => void;
+    onSubmit: () => void;
 }
 
-export const ConfirmationModal = ({ isVisible, onClose }: Props) => {
-    const navigation: NavigationProp<ParamListBase> = useNavigation();
-
-    const onNavigate = (screen: string) => {
-        navigation.navigate(screen);
-    };
-
+export const ConfirmationModal = ({ isVisible, onClose, onSubmit }: Props) => {
     return (
         <View>
             <Modal
@@ -29,9 +23,9 @@ export const ConfirmationModal = ({ isVisible, onClose }: Props) => {
                         <Text style={styles.modalText}>¿Está seguro de agregar estos productos?</Text>
 
                         <View style={landingStyles.buttonContainer}>
-                            <CustomButton label="Añadir" style={landingStyles.button} onEvent={() => onNavigate('StorePostsScreen')} />
+                            <CustomButton label="Añadir" style={landingStyles.button} onEvent={onSubmit} />
 
-                            <TouchableOpacity onPress={() => onNavigate('StorePostsScreen')}>
+                            <TouchableOpacity onPress={onClose}>
                                 <Text style={[landingStyles.cancelText, landingStyles.linkText]}>
                                     Cancelar
                                 </Text>

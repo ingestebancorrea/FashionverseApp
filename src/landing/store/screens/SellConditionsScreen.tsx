@@ -7,12 +7,12 @@ import { landingStyles } from '../../../theme/landingTheme';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { productPriceSchema } from '../schemas/store.schema';
 import { ProductsContext } from '../../../context/landing/store/ProductsContextx';
-import { useShowToastNotification } from '../../../hooks/useShowToastNotification';
 import Toast from 'react-native-toast-message';
+import { usePostResponse } from '../hooks/usePostResponse';
 
 export const SellConditionsScreen = () => {
   const navigation: NavigationProp<ParamListBase> = useNavigation();
-  const { addProduct, errorMessage, removeError } = useContext(ProductsContext);
+  const { addProduct, errorMessage } = useContext(ProductsContext);
   const [status, setStatus] = useState<number>();
   const { handleSubmit, control, formState: { errors } } = useForm({
     defaultValues: {
@@ -20,41 +20,22 @@ export const SellConditionsScreen = () => {
     },
     resolver: yupResolver(productPriceSchema),
   });
-  const { showToast } = useShowToastNotification();
-
-  const onNavigate = (screen: string) => {
-    navigation.navigate(screen);
-  };
+  const { handleSuccessfulMessage, handleErrorMenssage } = usePostResponse();
 
   const onSubmit = async (data) => {
     Keyboard.dismiss();
     const resp = await addProduct(+data.price);
-    console.log(resp);
     setStatus(resp);
   };
 
   useEffect(() => {
     if ( status === 201 ) {
-      showToast('success', 'Producto registrado');
-
-      const timer = setTimeout(() => {
-        onNavigate('StoreProductsScreen');
-      }, 3000);
-
-      return () => clearTimeout(timer);
+      handleSuccessfulMessage('StoreProductsScreen','Producto registrado');
     }
   }, [status]);
 
   useEffect(() => {
-    if (!errorMessage) { return; }
-    showToast('error', 'Error en el registro.', errorMessage);
-
-    const timer = setTimeout(() => {
-      removeError();
-      navigation.navigate('StoreProductsScreen');
-    }, 3000);
-
-    return () => clearTimeout(timer);
+    handleErrorMenssage(errorMessage,'Error en el registro.','StoreProductsScreen');
   }, [errorMessage]);
 
   return (
@@ -85,7 +66,7 @@ export const SellConditionsScreen = () => {
       <View style={styles.textContainer}>
         <Text style={styles.text}>Ir a </Text>
 
-        <TouchableOpacity onPress={() => onNavigate('ProductsScreen')}>
+        <TouchableOpacity onPress={() => navigation.navigate('ProductsScreen')}>
           <Text style={[styles.text, landingStyles.linkText]}>simulador de costos</Text>
         </TouchableOpacity>
 
@@ -98,7 +79,7 @@ export const SellConditionsScreen = () => {
       <View style={landingStyles.buttonContainer}>
         <CustomButton label="Registrar" style={landingStyles.button} onEvent={handleSubmit(onSubmit)} />
 
-        <TouchableOpacity onPress={() => onNavigate('StoreProductsScreen')}>
+        <TouchableOpacity onPress={() => navigation.navigate('StoreProductsScreen')}>
           <Text style={[landingStyles.cancelText, landingStyles.linkText]}>
             Cancelar
           </Text>

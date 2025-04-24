@@ -17,16 +17,15 @@ export interface ProductsResponse {
     data: Product[];
 }
 
-
 export interface Product {
     id:       number;
     name: string;
-    category: string;
-    brand: string;
+    category: { id: number; name: string; };
+    brand: { id: number; name: string; };
     color: string;
     price: string | null;
     sizes: Size[];
-    img?:   string;
+    image_url?:   string;
 }
 
 export interface Size {
@@ -40,4 +39,36 @@ export interface RowData {
         name: string;
     };
     available_quantity: number;
+}
+
+export interface Post {
+    id: number;
+    likes: number;
+    type: string;
+    products: Product[];
+    comments: number;
+}
+
+export interface PostRequest {
+    description?: string;
+    posttype_id?: number;
+}
+
+export interface PostDetailsRequest {
+    post_id: number;
+    products: productId[];
+}
+
+type productId = Pick<Product, 'id'>;
+
+export interface Post {
+    id:       number;
+    likes: number;
+    type: string;
+    products: Product[];
+    comments: number;
+}
+
+export interface PostsResponse {
+    data: Post[];
 }

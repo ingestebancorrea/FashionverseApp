@@ -5,3 +5,6 @@ export * from './SellConditionsScreen';
 export * from './StorePostsScreens';
 export * from './PostDescriptionScreen';
 export * from './PostTypesScreen';
+export * from './StoreProfileConfigurationScreen';
+export * from './StoreProfileSettingsScreen';
+export * from './StoreBasicDataScreen';

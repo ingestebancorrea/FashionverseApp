@@ -4,7 +4,7 @@ import { REACT_APP_PRODUCTS_SERVICE } from '@env';
 import { Product, ProductRequest, ProductsResponse } from '../../../landing/store/interfaces/store.interfaces';
 import createApiInstance from '../../../api/apiInstance';
 import { ProductsContextProps } from '../../types/landing/store/productscontext.type';
-import { ProductsSearchParams, StructureFolder, UploadResponse } from '../../interfaces/landing/store/products.context.interface';
+import { ProductsSearchParams, StructureFolder, UploadResponse } from '../../interfaces/landing/store/productscontext.interface';
 import { productReducer, ProductState } from './ProductReducer';
 import { errorMessage } from '../../../api/axiosError';
 
@@ -23,6 +23,7 @@ export const ProductsProvider = ({ children }: any) => {
 
     const [state, dispatch] = useReducer(productReducer, productInitialState);
     const [products, setProducts] = useState<Product[]>([]);
+    const [loading,setLoading] = useState<boolean>(true);
 
     const loadProducts = async({ name }: ProductsSearchParams) => {
         let url = '/products?limit=100';
@@ -33,13 +34,14 @@ export const ProductsProvider = ({ children }: any) => {
 
         const resp = await api.get<ProductsResponse>(url);
         setProducts(resp.data.data);
+        setLoading(false);
     };
 
     const startSaveProduct = (product: ProductRequest) => {
         dispatch({ type: 'startSaveProduct', payload: { product } });
     };
 
-    const addProduct = async (price: number): Promise<number> => {
+    const addProduct = async (price: number): Promise<number | undefined> => {
         try {
             const resp = await api.post<Product>('/products', {
                 ...state.product,
@@ -48,12 +50,11 @@ export const ProductsProvider = ({ children }: any) => {
 
             return resp.status;
         } catch (error:any) {
-            console.error(error);
-            return error;
+            dispatch({ type: 'addError', payload: { errorMessage: errorMessage(error) } });
         }
     };
 
-    const updateProduct = async( categoryId: string, productName: string, productId: string ) => {
+    const updateProduct = async( categoryId: string, productName: string, productId: number ) => {
         const resp = await api.put<Product>(`/productos/${ productId }`,{
             nombre: productName,
             categoria: categoryId,
@@ -63,12 +64,12 @@ export const ProductsProvider = ({ children }: any) => {
         }) );// Retorna un nuevo array con los value modificados
     };
 
-    const loadProductById = async( id: string ): Promise<Product> => {
-        const resp = await api.get<Product>(`/productos/${id}`);
+    const loadProductById = async( id: number ): Promise<Product> => {
+        const resp = await api.get<Product>(`/products/${id}`);
         return resp.data;
     };
 
-    const uploadImage = async (data: Asset, detailProduct: StructureFolder) => {
+    const uploadImage = async (data: Asset, detailProduct: StructureFolder): Promise<UploadResponse[] | undefined> => {
         const formData = new FormData();
 
         formData.append('files', {
@@ -114,6 +115,7 @@ export const ProductsProvider = ({ children }: any) => {
             addError,
             removeError,
             errorMessage: state.errorMessage,
+            loading,
         }}>
             { children }
         </ProductsContext.Provider>

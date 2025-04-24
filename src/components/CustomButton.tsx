@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
     button: {
         padding: 12,
         borderWidth: 2,
-        borderColor: '#DEA76B',
-        backgroundColor: '#DEA76B',
+        borderColor: '#F74962',
+        backgroundColor: '#F74962',
         borderRadius: 5,
     },
     buttonText: {

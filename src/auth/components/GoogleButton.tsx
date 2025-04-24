@@ -7,10 +7,9 @@ interface Props {
     onEvent: () => void;
 }
 
-
 export const GoogleButton = ({ label, onEvent }: Props) => {
     return (
-        <View style={{ marginTop: 10 }}>
+        <View style={styles.parentContainer}>
             <TouchableOpacity
                 onPress={onEvent}
                 style={styles.facebookButton}
@@ -29,8 +28,11 @@ export const GoogleButton = ({ label, onEvent }: Props) => {
 };
 
 const styles = StyleSheet.create({
+    parentContainer: {
+        marginTop: 15,
+    },
     facebookButton: {
-        backgroundColor: '#4285F4',
+        backgroundColor: '#1B7A97',
         padding: 16,
         alignItems: 'center',
         justifyContent: 'center',
